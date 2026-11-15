@@ -1,4 +1,4 @@
 # Local dev secrets (copy to .dev.vars - never commit)
-RAZORPAY_KEY_ID=rzp_test_TzcJqvB7QZcLBS
-RAZORPAY_KEY_SECRET=your_test_key_secret_here
+RAZORPAY_KEY_ID=rzp_test_U0XUeUBv2ATcep
+RAZORPAY_KEY_SECRET=TORBBywoGFWCChTvRbrJGoBJ
 TOKEN_SECRET=any_long_random_string
