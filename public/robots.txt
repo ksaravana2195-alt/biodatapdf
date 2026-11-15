@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://biodatapdf.com/sitemap-index.xml
