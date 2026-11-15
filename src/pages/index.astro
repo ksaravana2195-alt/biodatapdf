@@ -1,50 +1,58 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
----
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Builder from '../components/Builder.astro';
+import { CATEGORIES, TEMPLATES, PREMIUM_COUNT } from '../lib/templates.js';
+import { TIERS, ALL_ACCESS } from '../lib/config.js';
+import { HOME_FAQ } from '../lib/seo-content.js';
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+const title = 'Marriage Biodata Maker – 140+ Free & Premium PDF Templates | BiodataPDF';
+const description = 'Create a marriage biodata in 2 minutes. 140+ Hindu, Muslim, Christian, Sikh, Jain and Buddhist biodata templates with live preview, photo crop and A4 PDF download.';
+const faqLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: HOME_FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
+const appLd = { '@context': 'https://schema.org', '@type': 'WebApplication', name: 'BiodataPDF Marriage Biodata Maker', url: 'https://biodatapdf.com', applicationCategory: 'UtilitiesApplication', operatingSystem: 'Any', offers: { '@type': 'AggregateOffer', priceCurrency: 'INR', lowPrice: '0', highPrice: '499', offerCount: '5' }, description };
+---
+<SiteLayout title={title} description={description} jsonLd={[faqLd, appLd]}>
+	<main>
+		<section class="hero"><div class="wrap">
+			<span class="pill">🔥 {TEMPLATES.length} DESIGNER TEMPLATES · 100% PRIVATE</span>
+			<h1>Free Marriage Biodata Maker – Create Biodata PDF in 2 Minutes</h1>
+			<p class="lead">Choose from {TEMPLATES.length} religion-based biodata formats for Hindu, Muslim, Christian, Sikh, Jain and Buddhist families. Live preview, big photo, instant A4 PDF.</p>
+			<ul class="pills"><li>No sign-up</li><li>Data stays in your browser</li><li>Sharp A4 PDF for print</li><li>WhatsApp image export</li></ul>
+		</div></section>
+
+		<Builder cat="hindu" />
+
+		<section class="sec" id="categories"><div class="wrap">
+			<h2>Biodata templates for every community</h2>
+			<p class="sub">Each category has 10 unique designs with its own colours, fonts, borders and sacred symbols. Two are free, eight are premium with a free demo.</p>
+			<div class="cards">
+				{CATEGORIES.map((c) => <a class="cc" href={`/templates/${c.slug}/`}><span class="ic">{c.icon}</span><b>{c.name} Biodata</b><span>10 templates · from free</span></a>)}
+			</div>
+		</div></section>
+
+		<section class="sec alt"><div class="wrap">
+			<h2>How to make a marriage biodata</h2>
+			<div class="steps">
+				<div class="step"><h3>Pick a template</h3><p>Browse {TEMPLATES.length} designs by religion or style. Premium designs open in demo mode so you can try every feature first.</p></div>
+				<div class="step"><h3>Fill in details</h3><p>Personal, family, career and contact details. Empty fields are hidden automatically so the page always looks neat.</p></div>
+				<div class="step"><h3>Add a big, clear photo</h3><p>Crop your photo to the template frame. Photos are printed large so they stay sharp on paper.</p></div>
+				<div class="step"><h3>Download PDF</h3><p>Get a print-ready A4 PDF or a WhatsApp image. Premium exports in Ultra-HD 300 DPI.</p></div>
+			</div>
+		</div></section>
+
+		<section class="sec" id="pricing"><div class="wrap">
+			<h2>Simple, fixed template pricing</h2>
+			<p class="sub">Pay once per template. No subscription. Try any premium template in demo mode before you pay.</p>
+			<div class="price-grid">
+				{Object.values(TIERS).map((t) => (
+					<div class="pc"><h3>{t.label}</h3><div class="amt">{t.price === 0 ? 'Free' : `₹${t.price}`} <small>{t.price ? 'per template' : ''}</small></div><p class="muted">{t.blurb}</p><ul>{t.features.map((f) => <li>{f}</li>)}</ul></div>
+				))}
+				<div class="pc hot"><h3>{ALL_ACCESS.label}</h3><div class="amt">₹{ALL_ACCESS.price} <small>one time</small></div><p class="muted">{ALL_ACCESS.blurb}</p><ul><li>All {PREMIUM_COUNT} premium templates</li><li>Every feature included</li><li>Best value for families</li></ul></div>
+			</div>
+		</div></section>
+
+		<section class="sec alt faq" id="faq"><div class="wrap prose">
+			<h2>Frequently asked questions</h2>
+			{HOME_FAQ.map(([q, a]) => <details><summary>{q}</summary><p>{a}</p></details>)}
+		</div></section>
+	</main>
+</SiteLayout>
