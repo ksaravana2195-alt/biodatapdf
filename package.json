@@ -1,6 +1,6 @@
 {
 	"name": "biodatapdf",
-	"description": "Build a personal website, blog, or portfolio with Astro.",
+	"description": "BiodataPDF - marriage biodata maker with 140+ templates",
 	"cloudflare": {
 		"label": "Astro Framework Starter",
 		"products": [
