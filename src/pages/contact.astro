@@ -1,0 +1,10 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { SITE } from '../lib/config.js';
+---
+<SiteLayout title="Contact BiodataPDF" description="Contact BiodataPDF for support, payment or refund questions.">
+	<main class="sec"><div class="wrap prose">
+		<h1>Contact us</h1>
+		<p>For help with downloads, payments or refunds, email us at <a href={`mailto:${SITE.email}`}>{SITE.email}</a>. Please include your Razorpay payment ID so we can help quickly.</p>
+	</div></main>
+</SiteLayout>
