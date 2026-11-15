@@ -1,0 +1,16 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { SITE } from '../lib/config.js';
+---
+<SiteLayout title="Privacy Policy | BiodataPDF" description="How BiodataPDF handles your data. Biodata details and photos stay in your browser.">
+	<main class="sec"><div class="wrap prose">
+		<h1>Privacy Policy</h1>
+		<p>Biodata details and photos you enter are processed in your browser to draw the preview and PDF. They are not sent to our servers. A draft may be saved in your own browser storage so you can continue later; clearing browser data removes it.</p>
+		<h2>Payments</h2>
+		<p>Payments are handled by Razorpay. We do not see or store your card, UPI or bank details. We keep only the payment ID in your browser to remember which templates you unlocked.</p>
+		<h2>Cookies and ads</h2>
+		<p>We may use analytics and advertising cookies (such as Google AdSense) to measure traffic and show ads. You can control cookies in your browser settings.</p>
+		<h2>Contact</h2>
+		<p>Questions? Email <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.</p>
+	</div></main>
+</SiteLayout>
