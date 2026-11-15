@@ -1,0 +1,72 @@
+---
+import '../styles/site.css';
+import '../styles/biodata.css';
+import { SITE } from '../lib/config.js';
+import { googleFontsUrl } from '../lib/templates.js';
+import { CATEGORIES } from '../lib/templates.js';
+
+interface Props { title: string; description: string; jsonLd?: object[]; noindex?: boolean; image?: string }
+const { title, description, jsonLd = [], noindex = false, image = '/og-image.png' } = Astro.props;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const fonts = googleFontsUrl() + '&family=Plus+Jakarta+Sans:wght@400;500;600;700;800';
+const org = { '@context': 'https://schema.org', '@type': 'Organization', name: SITE.name, url: SITE.url, logo: SITE.url + '/favicon.svg' };
+const site = { '@context': 'https://schema.org', '@type': 'WebSite', name: SITE.name, url: SITE.url };
+---
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>{title}</title>
+	<meta name="description" content={description} />
+	<link rel="canonical" href={canonical} />
+	<meta name="robots" content={noindex ? 'noindex,nofollow' : 'index,follow,max-image-preview:large'} />
+	<meta name="theme-color" content="#be123c" />
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+	<link rel="sitemap" href="/sitemap-index.xml" />
+	<meta property="og:type" content="website" />
+	<meta property="og:site_name" content={SITE.name} />
+	<meta property="og:title" content={title} />
+	<meta property="og:description" content={description} />
+	<meta property="og:url" content={canonical} />
+	<meta property="og:image" content={new URL(image, SITE.url).href} />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={title} />
+	<meta name="twitter:description" content={description} />
+	<meta name="twitter:image" content={new URL(image, SITE.url).href} />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link rel="stylesheet" href={fonts} media="print" onload="this.media='all'" />
+	<noscript><link rel="stylesheet" href={fonts} /></noscript>
+	{SITE.gaId && <script async src={`https://www.googletagmanager.com/gtag/js?id=${SITE.gaId}`}></script>}
+	{SITE.gaId && <script is:inline define:vars={{ id: SITE.gaId }}>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config',id);</script>}
+	{[org, site, ...jsonLd].map((j) => <script type="application/ld+json" set:html={JSON.stringify(j)} />)}
+</head>
+<body>
+	<header class="hdr">
+		<div class="wrap">
+			<a href="/" class="logo" aria-label="BiodataPDF home"><i>b</i><span>biodata<b>pdf</b>.com</span></a>
+			<nav class="nav" aria-label="Main">
+				<a href="/#builder">Biodata Maker</a>
+				<a href="/#categories">Templates</a>
+				<a href="/#pricing">Pricing</a>
+				<a href="/blog/">Guides</a>
+				<a href="/#faq">FAQ</a>
+			</nav>
+			<button type="button" id="hdrDownload" class="btn primary" data-busy-btn>Download PDF</button>
+		</div>
+	</header>
+	<slot />
+	<footer class="ftr">
+		<div class="wrap">
+			<div class="cols">
+				<div><h4>BiodataPDF</h4><p>Free marriage biodata maker with 140+ templates. Your data stays in your browser.</p></div>
+				<div><h4>Templates</h4><ul>{CATEGORIES.slice(0, 7).map((c) => <li><a href={`/templates/${c.slug}/`}>{c.name} biodata</a></li>)}</ul></div>
+				<div><h4>More styles</h4><ul>{CATEGORIES.slice(7).map((c) => <li><a href={`/templates/${c.slug}/`}>{c.name}</a></li>)}</ul></div>
+				<div><h4>Company</h4><ul><li><a href="/blog/">Guides</a></li><li><a href="/about/">About</a></li><li><a href="/contact/">Contact</a></li><li><a href="/privacy-policy/">Privacy Policy</a></li><li><a href="/terms-and-refund/">Terms &amp; Refunds</a></li></ul></div>
+			</div>
+			<div class="copy">© {new Date().getFullYear()} biodatapdf.com · Payments secured by Razorpay</div>
+		</div>
+	</footer>
+</body>
+</html>
