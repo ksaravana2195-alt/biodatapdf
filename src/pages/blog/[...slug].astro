@@ -1,21 +1,21 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
-import { render } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+	return posts.map((post) => ({ params: { slug: post.id }, props: post }));
 }
-type Props = CollectionEntry<'blog'>;
-
 const post = Astro.props;
 const { Content } = await render(post);
+const ld = { '@context': 'https://schema.org', '@type': 'Article', headline: post.data.title, description: post.data.description, datePublished: post.data.pubDate.toISOString(), author: { '@type': 'Organization', name: 'BiodataPDF' } };
 ---
-
-<BlogPost {...post.data}>
-	<Content />
-</BlogPost>
+<SiteLayout title={`${post.data.title} | BiodataPDF`} description={post.data.description} jsonLd={[ld]}>
+	<main class="sec"><div class="wrap prose">
+		<div class="crumbs"><a href="/">Home</a> › <a href="/blog/">Guides</a></div>
+		<h1>{post.data.title}</h1>
+		<p class="muted small">{post.data.pubDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+		<Content />
+		<p><a class="btn primary" href="/#builder">Make your biodata now →</a></p>
+	</div></main>
+</SiteLayout>
