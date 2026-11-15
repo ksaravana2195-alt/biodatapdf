@@ -1,0 +1,39 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import Builder from '../../components/Builder.astro';
+import { CATEGORIES, templatesIn } from '../../lib/templates.js';
+import { CAT_CONTENT } from '../../lib/seo-content.js';
+import { TIERS } from '../../lib/config.js';
+
+export function getStaticPaths() {
+	return CATEGORIES.map((c) => ({ params: { category: c.slug }, props: { cat: c } }));
+}
+const { cat } = Astro.props;
+const c = CAT_CONTENT[cat.id];
+const list = templatesIn(cat.id);
+const faqLd = { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: c.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
+const crumbLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://biodatapdf.com/' }, { '@type': 'ListItem', position: 2, name: cat.name + ' biodata', item: `https://biodatapdf.com/templates/${cat.slug}/` }] };
+---
+<SiteLayout title={c.title} description={c.desc} jsonLd={[faqLd, crumbLd]}>
+	<main>
+		<section class="hero"><div class="wrap">
+			<div class="crumbs"><a href="/">Home</a> › {cat.name} biodata</div>
+			<h1>{c.h1}</h1>
+			<p class="lead">{c.intro[0]}</p>
+		</div></section>
+		<Builder cat={cat.id} />
+		<section class="sec"><div class="wrap prose">
+			<h2>About {cat.name} biodata templates</h2>
+			<p>{c.intro[1]}</p>
+			<h2>What to include in a {cat.name.toLowerCase()} marriage biodata</h2>
+			<ul>{c.include.map((i) => <li>{i}</li>)}</ul>
+			<h2>All {list.length} {cat.name} templates</h2>
+			<ul class="tlist">{list.map((t) => <li><b>#{t.no} {t.name}</b> – {TIERS[t.tier].label}{t.premium ? ` (₹${t.price})` : ' (free)'}</li>)}</ul>
+		</div></section>
+		<section class="sec alt faq"><div class="wrap prose">
+			<h2>{cat.name} biodata FAQs</h2>
+			{c.faq.map(([q, a]) => <details open><summary>{q}</summary><p>{a}</p></details>)}
+			<p><a href="/">See all 140 templates →</a></p>
+		</div></section>
+	</main>
+</SiteLayout>
