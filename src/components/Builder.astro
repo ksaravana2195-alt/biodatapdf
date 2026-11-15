@@ -1,0 +1,101 @@
+---
+interface Props { cat?: string }
+const { cat = 'hindu' } = Astro.props;
+---
+<section id="builder" class="builder" aria-label="Biodata maker">
+<div id="bdApp" data-cat={cat} data-view="edit">
+	<div class="mv" role="tablist" aria-label="Switch view">
+		<button type="button" id="mvEdit" data-mv="edit" class="on">✏️ Edit details</button>
+		<button type="button" id="mvPrev" data-mv="prev">👁 Preview &amp; download</button>
+	</div>
+
+	<div class="pick">
+		<div class="pick-top">
+			<label class="pick-cat"><span>Choose style</span><select id="catSelect" aria-label="Template category"></select></label>
+			<button type="button" id="browseAll" class="btn dark">Browse all 140 templates</button>
+		</div>
+		<div id="strip" class="strip" aria-label="Templates in this category"></div>
+	</div>
+
+	<div class="work">
+		<div class="edit">
+			<div class="tabs" id="tabBar" role="tablist"></div>
+			<div class="tab-body" id="tabBody"></div>
+			<div class="edit-foot">
+				<button type="button" class="link" id="btnReset">Reset sample</button>
+				<button type="button" class="link" id="btnClear">Clear all fields</button>
+				<button type="button" class="btn dark" id="btnNext">Next →</button>
+			</div>
+		</div>
+
+		<div class="prev">
+			<div id="pvTop" class="pv-top">
+				<div class="pv-info">
+					<span id="tplBadge" class="badge free">Free</span>
+					<div><b id="tplName"></b><small id="tplMeta"></small></div>
+				</div>
+				<div class="pv-actions">
+					<button type="button" class="btn sm" id="zoomOut" aria-label="Zoom out">−</button>
+					<span id="zoomLevel" class="zl">100%</span>
+					<button type="button" class="btn sm" id="zoomIn" aria-label="Zoom in">+</button>
+					<button type="button" class="btn sm" id="btnPng" data-busy-btn>WhatsApp PNG</button>
+					<button type="button" class="btn primary" id="btnDownload" data-busy-btn>⬇ Download PDF</button>
+				</div>
+			</div>
+			<div id="demoBar" class="demo-bar" hidden>
+				<span>★ <b>Premium demo</b>: try all features free. Pay <b id="demoBarPrice"></b> once to download without watermark.</span>
+				<button type="button" class="btn sm primary" id="demoUnlock">Unlock</button>
+			</div>
+			<div class="pv-scroll" id="pvScroll"><div id="pvStage" class="pv-stage"></div></div>
+		</div>
+	</div>
+
+	<input type="file" id="fileInput" accept="image/*" hidden />
+
+	<div id="galleryModal" class="modal" hidden role="dialog" aria-modal="true" aria-label="All templates">
+		<div class="modal-box big">
+			<div class="modal-head">
+				<h2>All biodata templates <small id="gCount"></small></h2>
+				<input id="gQuery" type="search" placeholder="Search: #12, gold, Muslim, royal…" aria-label="Search templates" />
+				<button type="button" id="gClose" class="btn sm" aria-label="Close">✕</button>
+			</div>
+			<div class="chips" id="gCats"></div>
+			<div class="chips" id="gTiers"></div>
+			<div id="gGrid" class="ggrid"></div>
+		</div>
+	</div>
+
+	<div id="cropModal" class="modal" hidden role="dialog" aria-modal="true" aria-label="Crop photo">
+		<div class="modal-box">
+			<h2>Crop your photo</h2>
+			<p class="muted" id="cropShape"></p>
+			<div class="crop-area"><img id="cropImg" alt="Photo to crop" /></div>
+			<div class="modal-foot"><button type="button" class="btn" id="cropCancel">Cancel</button><button type="button" class="btn primary" id="cropApply">Use this photo</button></div>
+		</div>
+	</div>
+
+	<div id="unlockModal" class="modal" hidden role="dialog" aria-modal="true" aria-label="Unlock premium template">
+		<div class="modal-box">
+			<button type="button" id="ulClose" class="btn sm x" aria-label="Close">✕</button>
+			<h2>Unlock premium template</h2>
+			<p class="muted"><b id="ulName"></b> · <span id="ulTier"></span></p>
+			<ul class="ticks" id="ulFeatures"></ul>
+			<div class="buy">
+				<button type="button" class="btn primary lg" id="ulBuyOne"></button>
+				<button type="button" class="btn gold lg" id="ulBuyAll"></button>
+			</div>
+			<details class="restore"><summary>Already paid? Restore purchase</summary>
+				<div class="grid2"><label class="fld"><span>Email used for payment</span><input type="text" id="rsEmail" autocomplete="email" /></label><label class="fld"><span>Payment ID (pay_…)</span><input type="text" id="rsPid" placeholder="pay_XXXXXXXXXXXX" /></label></div>
+				<button type="button" class="btn sm" id="rsBtn">Restore</button>
+			</details>
+			<p class="muted small">Secure payment by Razorpay (UPI, cards, netbanking, wallets). Your biodata data never leaves your device.</p>
+		</div>
+	</div>
+
+	<div id="busy" class="busy" hidden><div class="spin"></div><span id="busyMsg">Working…</span></div>
+	<div id="toast" class="toast" role="status" aria-live="polite"></div>
+</div>
+</section>
+<script>
+	import '../scripts/app.js';
+</script>
